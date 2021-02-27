@@ -17,10 +17,10 @@ public class EmployeeManagementSystemApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(EmployeeManagementSystemApplication.class, args);
 
-        EmployeeRepository employeeRepository = run.getBean(EmployeeRepository.class);
-
-        Employee employee = employeeRepository.findByEmail("admin@app.com").orElse(employeeRepository.save(new Employee("admin@app.com",
-                "password", "ADMIN")));
+//        EmployeeRepository employeeRepository = run.getBean(EmployeeRepository.class);
+//
+//        Employee employee = employeeRepository.findByEmail("admin@app.com").orElse(employeeRepository.save(new Employee("admin@app.com",
+//                "password", "ADMIN")));
     }
 
 }

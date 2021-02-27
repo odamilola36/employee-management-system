@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -16,13 +13,12 @@ import java.time.LocalDateTime;
 @Entity
 public class Attendance {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String employeeId;
-    @CreationTimestamp
-    private Timestamp clockIn;
+    private String clockIn;
+    private String date;
 
-    @CreationTimestamp
-    private Timestamp clockOut;
+    @ManyToOne
+    private Employee employee;
 }

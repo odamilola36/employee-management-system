@@ -6,12 +6,9 @@ import com.lomari.employeemanagementsystem.repository.EmployeeRepository;
 import com.lomari.employeemanagementsystem.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -23,23 +20,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String loginUser(UserLoginDTO userLoginDTO) {
-        if (!isValid(userLoginDTO)) return "redirect:/";
-        return "home";
+    public String loginUser(UserLoginDTO userLoginDTO, HttpSession session, Model model) {
+        if (!isValid(userLoginDTO)){
+            model.addAttribute("validUser", isValid(userLoginDTO));
+            return "redirect:/";
+        }
+        else{
+            session.setAttribute("emsUser", employeeRepository.findByEmailAndPassword(userLoginDTO.getEmail(),
+                    userLoginDTO.getPassword()).get());
+            return "employees";
+        }
     }
     public boolean isValid(UserLoginDTO user){
-        return employeeRepository.findByEmail(user.getEmail()).isPresent();
+        return employeeRepository.findByEmailAndPassword(user.getEmail(), user.getPassword()).isPresent();
     }
     public boolean isAdmin(UserLoginDTO user){
-        Employee employee = employeeRepository.findByEmail(user.getEmail()).orElse(null);
+        Employee employee = employeeRepository.findByEmailAndPassword(user.getEmail(), user.getPassword()).orElse(null);
         if (employee == null ||
                 !employee.getRole().equalsIgnoreCase("admin")) return false;
         return true;
     }
-//    private boolean hasCookie(UserLoginDTO user, HttpServletRequest request){
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie: cookies) {
-//            if (cookie.)
-//        }
-//    }
 }
